@@ -10,43 +10,35 @@ public class 괄호 {
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine()); // 입력받을 문자열 개수
-        StringBuilder sb = new StringBuilder();
-        String[] ans = new String[N+1];
-        int i=0;
 
-        while(i<N){
+        for(int i=0; i<N; i++){
             String line = br.readLine();
             char[] vps = new char[line.length()];
             Stack<Integer> stack = new Stack<>();
+            boolean flag = true;
 
             for(int j=0; j<line.length(); j++){
                 vps[j] = line.charAt(j);
                 if(vps[j] == '('){
                     stack.push(1); // '('가 보이면 1을 넣음
                 }else{
-                    if(!stack.empty()) { // 스택이 비어있지 않으면 1을 뺌
-                        stack.pop();
-                    }else{
-                        ans[i] = "NO";
-                        i++;
+                    if(stack.isEmpty()) { // 스택이 비어있지 않으면 1을 뺌
+                        flag = false;
                         break;
+                    }else{
+                        stack.pop();
                     }
                 }
             }
-            System.out.println(i);
-            if(ans[i].isBlank()){
-                if(stack.empty()){
-                    ans[i] = "YES";
-                }else{
-                    ans[i] = "NO";
-                }
+
+            if(flag && stack.isEmpty()){
+                System.out.println("YES");
+            }else{
+                System.out.println("NO");
             }
-            i++;
+
         }
 
-        for(int j=0; j<ans.length; j++){
-//            System.out.println(ans[i]);
-        }
     }
 }
 
