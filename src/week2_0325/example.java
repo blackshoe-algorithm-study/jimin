@@ -1,28 +1,31 @@
 package week2_0325;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class example{
-    public static String solution(StringBuilder sb){
-        String ans = sb.toString();
-        return ans;
+    static int[] tree;
+    static int size = 0;
+    public static void main(String[] args) throws IOException {
+
     }
-    public static void main(String[] args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String phonNum = br. readLine();
-        char[] num = new char[phonNum.length()];
-        for(int i=0; i<phonNum.length(); i++){
-            num[i] = phonNum.charAt(i);
-        }
-        StringBuilder sb = new StringBuilder();
-        for(int k=0; k<phonNum.length(); k++){
-            if(k<phonNum.length()-4) sb.append("*");
-            else sb.append(num[k]);
-        }
-//        System.out.print(sb);
-        solution(sb);
+    static int swap(int x, int y){
+        return x;
     }
+
+    // 값 추가
+    static void add(int x){
+        tree[++size] = x;
+
+        int idx = size;
+        while(idx>1){
+            // 부모노드가 자식노드보다 값이 더 큰경우
+            if(tree[idx] < tree[idx/2]) swap(idx, idx/2);
+            else break;
+            idx /= 2;
+        }
+    }
+
+
+
 }
