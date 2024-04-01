@@ -17,24 +17,20 @@ public class 회의실_배정 {
                 arr[i][j] = Integer.parseInt(str.nextToken());
             }
         }
-        Arrays.sort(arr); // 오름차순으로 정렬된 2차원 배열
+        Arrays.sort(arr, (o1,o2) -> { return o1[0]-o2[0];}); // 오름차순으로 정렬된 2차원 배열
 
-        LinkedList<Integer> ans = new LinkedList<>(); // 정답을 넣는 배열
+        ArrayList<Integer> ans = new ArrayList<>(); // 정답을 넣는 배열
 
-//        int i=0;
-//        int count = 0;
-//        while(i < N){
-//            int compare = arr[i++][1];
-//            if(compare <= arr[i][0]){
-//                count ++;
-//            }
-//        }
         int count = 0;
         for(int i=0; i<N; i++){
             int compare = arr[i][1];
             int j=i+1;
             while(j<N){
-                if(compare <= arr[j][0]) count ++;
+                if(compare <= arr[j][0]) {
+                    count++;
+                    compare = arr[j][1];
+                }
+                j++;
             }
             ans.add(count);
         }
