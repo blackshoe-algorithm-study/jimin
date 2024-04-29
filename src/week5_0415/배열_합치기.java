@@ -26,26 +26,11 @@ public class 배열_합치기 {
             ans[N+j] = num2;
         }
 
-        tmp = new int[N];
-        mergeSort(0, N);
-        for(int i=0; i< ans.length; i++){
-            System.out.print(ans[i] + " ");
+        StringBuilder sb = new StringBuilder();
+        Arrays.sort(ans);
+        for(int i=0; i<ans.length; i++){
+            sb.append(ans[i]).append(' ');
         }
+        System.out.print(sb);
     }
-    public static void mergeSort( int l, int r){
-        if(r-l == 1) return;// 연속된 배열인 경우 반환
-        int m = (l+r)/2;
-        mergeSort( l, m);
-        mergeSort( m, r);
-
-        int lp = l, rp = m;
-        for(int i=l; i<r; i++){
-            if(rp == r || (lp < m && ans[lp] < ans[rp])) tmp[i] = ans[lp++];
-            else tmp[i] = ans[rp++];
-        }
-        for(int i=l; i<r; i++) ans[i] = tmp[i];
-    }
-
 }
-
-//
