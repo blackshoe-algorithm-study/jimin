@@ -7,9 +7,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class 미로탐색 {
-    static int[] dx = {0, 1, 0};
-    static int[] dy = {1, 0, -1};
+public class 미로_탐색 {
+    static int[] dx = {0, 1, 0, -1};
+    static int[] dy = {1, 0, -1, 0};
     static char[][] arr;
     static int[][] visited;
     public static void main(String[] args)throws IOException{
@@ -29,28 +29,27 @@ public class 미로탐색 {
         System.out.println(result);
     }
     public static int bfs(int N, int M){
-        Queue<Integer[]> list = new LinkedList<>();
-        int x=1; int y=1;
-        list.add(new Integer[]{x, y});
-        visited[x][y] = 1;
+        Queue<int[]> list = new LinkedList<>();
+        list.add(new int[]{1, 1});  // 시작점
+        visited[1][1] = 1;  // 시작점 방문 표시
         while(!list.isEmpty()){
-            Integer[] want = list.remove();
-            x = want[0];
-            y = want[1];
-            if(x == N && y == M){
-                return visited[x][y]-1;
+            int[] current = list.remove();
+            int x = current[0];
+            int y = current[1];
+
+            if (x == N && y == M) {
+                return visited[x][y] - 1;
             }
-            if(y+1<=M && arr[x][y+1]=='1' && visited[x][y+1] == 0){
-                visited[x][y+1] = visited[x][y]+1;
-                list.add(new Integer[]{x, y+1});
-            }
-            if(y-1>=1 && arr[x][y-1]=='1' && visited[x][y-1] == 0){
-                visited[x][y-1] = visited[x][y]+1;
-                list.add(new Integer[]{x, y-1});
-            }
-            if(x+1<=N && arr[x+1][y]=='1' && visited[x+1][y] == 0) {
-                visited[x + 1][y] = visited[x][y]+1;
-                list.add(new Integer[]{x + 1, y});
+
+            for (int i = 0; i < 4; i++) {  // 네 방향 모두 확인
+                int nx = x + dx[i];
+                int ny = y + dy[i];
+
+                if(nx <0 || ny<0 || nx>=M || ny>=N) continue;
+                if(arr[nx][ny] == 1 && visited[nx][ny]==0){
+                    list.add(new int[] {nx, ny});
+                    visited[nx][ny] = visited[x][y] + 1;
+                }
             }
         }
         return -1;
