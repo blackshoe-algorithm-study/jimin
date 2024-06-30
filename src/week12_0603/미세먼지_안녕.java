@@ -22,7 +22,6 @@ public class 미세먼지_안녕 {
             List<Integer> arr = new LinkedList<>();
             for(int j=0; j<C; j++){
                 map[i][j] = Integer.parseInt(str.nextToken());
-
                 if(map[i][j] == -1){ // 공기청정기 위치
                     rowPos = i; // 공기청정기 map[rowPos-1][0] map[rowPos][0]
                 }
