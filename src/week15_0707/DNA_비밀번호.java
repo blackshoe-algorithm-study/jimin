@@ -42,7 +42,7 @@ public class DNA_비밀번호 {
         }
         char[] target = {'A', 'C', 'G', 'T'};
         for(int j=0; j<4; j++){
-            if(hmap.getOrDefault(target[j],0) != length[j]){
+            if(hmap.getOrDefault(target[j],0) >= length[j]){
                 return false;
             }
         }
