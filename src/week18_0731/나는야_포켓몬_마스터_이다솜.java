@@ -32,7 +32,7 @@ public class 나는야_포켓몬_마스터_이다솜 {
         }
         System.out.print(sb);
     }
-    public static boolean isNumeric(String name){
+    public static boolean isNumeric(String name){ //isAlphabetic
         for(char c: name.toCharArray()){
             if(!Character.isDigit(c)){
                 return false;

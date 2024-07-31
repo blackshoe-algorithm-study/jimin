@@ -9,25 +9,25 @@ import java.util.StringTokenizer;
 
 public class 랜선_자르기 {
     static int N;
-    static int[] arr;
+    static long[] arr;
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int K = Integer.parseInt(st.nextToken());
         N = Integer.parseInt(st.nextToken());
-        arr = new int[K];
-        int MAX = 0;
+        arr = new long[K];
+        long MAX = 0;
         for(int i=0; i<K; i++){
-            arr[i] = Integer.parseInt(br.readLine());
+            arr[i] = Long.parseLong(br.readLine());
             MAX = Math.max(MAX, arr[i]);
         }
 
         System.out.print(binarySearch(1, MAX));
     }
-    public static int binarySearch(int low, int high){
-        int result = 0;
+    public static long binarySearch(long low, long high){
+        long result = 0;
         while(low < high){
-            int mid = (low + high) / 2;
+            long mid = (low + high) / 2;
             if(N <= check(mid)){ // mid 값으로 자른 개수가 더 많거나 같은 경우
                 result = mid;
                 low = mid+1;
@@ -37,7 +37,7 @@ public class 랜선_자르기 {
         }
         return result;
     }
-    public static int check(int key){
+    public static int check(long key){
         int cnt =0;
         for(int i=0; i<arr.length; i++){
             cnt += arr[i]/key;
