@@ -26,7 +26,7 @@ public class 랜선_자르기 {
     }
     public static long binarySearch(long low, long high){
         long result = 0;
-        while(low < high){
+        while(low <= high){
             long mid = (low + high) / 2;
             if(N <= check(mid)){ // mid 값으로 자른 개수가 더 많거나 같은 경우
                 result = mid;
