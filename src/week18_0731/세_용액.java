@@ -28,7 +28,7 @@ public class 세_용액 {
             System.out.print(pick[i] + " ");
         }
     }
-    static void binarySearch(int index){
+    static void binarySearch(int index){ //투포인터
         int left = index+1;
         int right = liquids.length-1;
 
