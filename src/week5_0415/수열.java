@@ -6,34 +6,33 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class 수열 {
+    static int N, K;
+    static int[] arr;
     public static void main(String[] args)throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer str;
-        str = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(str.nextToken()); // 정수 개수
-        int K = Integer.parseInt(str.nextToken()); // 연속할 수 개수
-        int[] arr = new int[N];
-        str= new StringTokenizer(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken()); // 배열
+        K = Integer.parseInt(st.nextToken()); // 슬라이딩 윈도우 크기
+        st = new StringTokenizer(br.readLine());
+        arr = new int[N];
         for(int i=0; i<N; i++){
-            arr[i] = Integer.parseInt(str.nextToken());
+            arr[i] = Integer.parseInt(st.nextToken());
         }
-
-        Queue<Integer> queue = new LinkedList<>();
-        int max = Integer.MIN_VALUE;
-        for(int i=0; i<N; i++){
-            int sum = 0;
-            if(i+K < N){
-                for(int j=i; j<i+K; j++){
-                    sum += arr[j];
-                }
-                queue.offer(sum);
-            }
-            if(!queue.isEmpty()) {
-                int numA = queue.poll();
-                max = Math.max(numA, max);
-            }
+        int ans = slidingWindow();
+        System.out.print(ans);
+    }
+    private static int slidingWindow(){
+        int sum = 0;
+        int cnt = 0;
+        int maxSum = Integer.MIN_VALUE;
+        for(int i=0; i<K; i++){
+            sum += arr[i];
+        } // 초기값 설정
+        maxSum = sum;
+        for(int i=K; i<N; i++){
+            sum = sum+arr[i]-arr[i-K];
+            maxSum = Math.max(maxSum, sum);
         }
-        System.out.println(max);
-
+        return maxSum;
     }
 }
