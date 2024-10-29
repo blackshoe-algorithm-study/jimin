@@ -1,37 +1,55 @@
 package week9_0515;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Comparator;
-import java.util.PriorityQueue;
+import java.io.*;
+import java.util.*;
 
 public class 문제집 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        PriorityQueue<Integer> pq = new PriorityQueue<>(new Comparator<Integer>(){
-            @Override
-            public int compare(Integer o1, Integer o2){
-                if(Math.abs(o1) > Math.abs(o2)){
-                    return 1;
-                }else if(Math.abs(o1) == Math.abs(o2)){
-                    return o1-o2;
-                }else{
-                    return -1;
-                }
-            }
-        });
-        StringBuilder sb = new StringBuilder();
-        for(int i=0; i<N; i++){
-            int x = Integer.parseInt(br.readLine());
-            if(x==0){
-                if(pq.isEmpty()) sb.append("0").append("\n");
-                else sb.append(pq.poll()).append("\n");
-            }else{
-                pq.offer(x);
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int N = Integer.parseInt(st.nextToken()); // 문제 개수
+        int M = Integer.parseInt(st.nextToken()); // 의존 관계 수
+
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i <= N; i++) {
+            graph.add(new ArrayList<>());
+        }
+
+        int[] inDegree = new int[N + 1];
+        for (int i = 0; i < M; i++) {
+            st = new StringTokenizer(br.readLine());
+            int A = Integer.parseInt(st.nextToken());
+            int B = Integer.parseInt(st.nextToken());
+            graph.get(A).add(B);
+            inDegree[B]++;
+        }
+
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+        for (int i = 1; i <= N; i++) {
+            if (inDegree[i] == 0) {
+                pq.offer(i);
             }
         }
-        System.out.print(sb);
+
+        StringBuilder sb = new StringBuilder();
+
+        // 위상 정렬 수행
+        while (!pq.isEmpty()) {
+            int current = pq.poll();
+            sb.append(current).append(" ");
+
+            // 현재 문제의 후속 문제들의 진입 차수를 감소시키기
+            for (int neighbor : graph.get(current)) {
+                inDegree[neighbor]--;
+                if (inDegree[neighbor] == 0) {
+                    pq.offer(neighbor);
+                }
+            }
+        }
+
+        // 최종 위상 정렬 결과 출력
+        System.out.print(sb.toString().trim());
     }
 }
