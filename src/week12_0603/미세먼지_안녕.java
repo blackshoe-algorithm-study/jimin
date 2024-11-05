@@ -3,55 +3,116 @@ package week12_0603;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.StringTokenizer;
 
 public class 미세먼지_안녕 {
-    static int[] dx = {1, 0, -1, 0};
-    static int[] dy = {0, 1, 0, -1};
-    static int rowPos;
-    public static void main(String[] args) throws IOException{
+    static int R, C, T;
+    static int[][] map;
+    static int calPosRow;
+    static int[] dx = {0, 1, 0, -1};
+    static int[] dy = {1, 0, -1, 0};
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer str;
-        str = new StringTokenizer(br.readLine());
-        int R = Integer.parseInt(str.nextToken()); //R행
-        int C = Integer.parseInt(str.nextToken()); //C열
-        int T = Integer.parseInt(str.nextToken()); //T초
-        int[][] map = new int[R][C];
+        StringTokenizer st;
+        st = new StringTokenizer(br.readLine());
+        R = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
+        T = Integer.parseInt(st.nextToken());
+        map = new int[R][C];
         for(int i=0; i<R; i++){
-            str = new StringTokenizer(br.readLine());
-            List<Integer> arr = new LinkedList<>();
+            st = new StringTokenizer(br.readLine());
             for(int j=0; j<C; j++){
-                map[i][j] = Integer.parseInt(str.nextToken());
-                if(map[i][j] == -1){ // 공기청정기 위치
-                    rowPos = i; // 공기청정기 map[rowPos-1][0] map[rowPos][0]
+                map[i][j] = Integer.parseInt(st.nextToken());
+                if(map[i][j] == -1){
+                    calPosRow = i-1; // 최종적으로는 시계방향 부분의 위치 기억
                 }
             }
         }
-        for(int t=T; t>0; t--){
-            for(int r=0; r<rowPos-1; r++){ //공기청정기 윗부분
-                for(int c=0; c<C; c++){
-                    Queue<Integer> Q = new LinkedList<>();
-                    circulate(map, r, c, R, C, Q);
-                }
-            }
-        }
-    }
-    private static void circulate(int[][] map, int r, int c, int R, int C, Queue<Integer> Q) { //r: 현재 행 c: 현재 열
-        int cnt = 0; //방향 개수
-        for (int i = 0; i < 4; i++) {
-            if (r + dx[i] >= 0 && c + dy[i] >= 0 && r + dx[i] < rowPos-1 && c + dy[i] < C
-                    && map[r + dx[i]][c + dy[i]] != -1) cnt++;
-        }
-        map[r][c] -= Math.floor(map[r][c]/5) * cnt;
-       for(int j = 0 ; j<4; j++){
-           if (r + dx[j] >= 0 && c + dy[j] >= 0 && r + dx[j] < rowPos-1 && c + dy[j] < C
-                   && map[r + dx[j]][c + dy[j]] != -1){
-               map[r+dx[j]][c+dy[j]] += Math.floor(map[r][c]/5);
-           }
-       }
-    }
-}
 
-// 자기자신: 자기자신 - [자기자신/5]*(방향개수)
-// 근처: [자기자신/5]*(방향개수)/(방향개수) = [자기자신/5]
-// 1초동안 모든 칸에서 미세먼지 확산
+        while(T > 0){
+            spreadDust();
+            airSimulation();
+            T--;
+        }
+
+        int totalDust = 0;
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+                if (map[i][j] > 0) {
+                    totalDust += map[i][j];
+                }
+            }
+        }
+        System.out.println(totalDust);
+    }
+    static void spreadDust() {
+        int[][] newMap = new int[R][C];
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+                if (map[i][j] > 0) {
+                    int amount = map[i][j] / 5;
+                    int spreadCount = 0;
+
+                    for (int d = 0; d < 4; d++) {
+                        int nx = i + dx[d];
+                        int ny = j + dy[d];
+                        if (nx >= 0 && ny >= 0 && nx < R && ny < C && map[nx][ny] != -1) {
+                            newMap[nx][ny] += amount;
+                            spreadCount++;
+                        }
+                    }
+                    newMap[i][j] += map[i][j] - amount * spreadCount;
+                }
+            }
+        }
+
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+                map[i][j] = newMap[i][j];
+            }
+        }
+    }
+
+    static void airSimulation() {
+        int top = calPosRow; // 공기청정기 윗 부분좌표며,  반시계 방향으로 진행
+
+        for (int x = top - 1; x > 0; x--) {
+            map[x][0] = map[x - 1][0];
+        }
+
+        for (int y = 0; y < C - 1; y++) {
+            map[0][y] = map[0][y + 1];
+        }
+
+        for (int x = 0; x < top; x++) {
+            map[x][C - 1] = map[x + 1][C - 1];
+        }
+
+        for (int y = C - 1; y > 1; y--) {
+            map[top][y] = map[top][y - 1];
+        }
+
+        map[top][1] = 0; // 공기청정기로 나가는 곳이므로 먼지는 0이다.
+
+        int bottom = calPosRow+1; // 공기청정기 밑 부분좌표며, 시계방향으로 진행
+
+        for (int x = bottom + 1; x < R - 1; x++) {
+            map[x][0] = map[x + 1][0];
+        }
+
+        for (int y = 0; y < C - 1; y++) {
+            map[R - 1][y] = map[R - 1][y + 1];
+        }
+
+        for (int x = R - 1; x > bottom; x--) {
+            map[x][C - 1] = map[x - 1][C - 1];
+        }
+
+        for (int y = C - 1; y > 1; y--) {
+            map[bottom][y] = map[bottom][y - 1];
+        }
+
+        map[bottom][1] = 0; // 공기청정기로 나가는 곳이므로 먼지는 0이다.
+    }
+
+}
