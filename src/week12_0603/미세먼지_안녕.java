@@ -30,25 +30,29 @@ public class 미세먼지_안녕 {
         }
 
         while(T > 0){
-            spreadDust();
+            map = spreadDust();
             airSimulation();
             T--;
         }
 
-        int totalDust = 0;
+        int temp = 0;
         for (int i = 0; i < R; i++) {
             for (int j = 0; j < C; j++) {
-                if (map[i][j] > 0) {
-                    totalDust += map[i][j];
+                if(map[i][j] > 0){
+                    temp += map[i][j];
                 }
             }
         }
-        System.out.println(totalDust);
+
+        System.out.println(temp);
     }
-    static void spreadDust() {
+    static int[][] spreadDust() {
         int[][] newMap = new int[R][C];
         for (int i = 0; i < R; i++) {
             for (int j = 0; j < C; j++) {
+                if(map[i][j] == -1){
+                    newMap[i][j] = -1;
+                }
                 if (map[i][j] > 0) {
                     int amount = map[i][j] / 5;
                     int spreadCount = 0;
@@ -56,7 +60,7 @@ public class 미세먼지_안녕 {
                     for (int d = 0; d < 4; d++) {
                         int nx = i + dx[d];
                         int ny = j + dy[d];
-                        if (nx >= 0 && ny >= 0 && nx < R && ny < C && map[nx][ny] != -1) {
+                        if (nx >= 0 && ny >= 0 && nx < R && ny < C && map[nx][ny]!=-1) {
                             newMap[nx][ny] += amount;
                             spreadCount++;
                         }
@@ -65,16 +69,11 @@ public class 미세먼지_안녕 {
                 }
             }
         }
-
-        for (int i = 0; i < R; i++) {
-            for (int j = 0; j < C; j++) {
-                map[i][j] = newMap[i][j];
-            }
-        }
+        return newMap;
     }
 
     static void airSimulation() {
-        int top = calPosRow; // 공기청정기 윗 부분좌표며,  반시계 방향으로 진행
+        int top = calPosRow;
 
         for (int x = top - 1; x > 0; x--) {
             map[x][0] = map[x - 1][0];
@@ -92,9 +91,9 @@ public class 미세먼지_안녕 {
             map[top][y] = map[top][y - 1];
         }
 
-        map[top][1] = 0; // 공기청정기로 나가는 곳이므로 먼지는 0이다.
+        map[top][1] = 0;
 
-        int bottom = calPosRow+1; // 공기청정기 밑 부분좌표며, 시계방향으로 진행
+        int bottom = calPosRow+1;
 
         for (int x = bottom + 1; x < R - 1; x++) {
             map[x][0] = map[x + 1][0];
@@ -112,7 +111,7 @@ public class 미세먼지_안녕 {
             map[bottom][y] = map[bottom][y - 1];
         }
 
-        map[bottom][1] = 0; // 공기청정기로 나가는 곳이므로 먼지는 0이다.
+        map[bottom][1] = 0;
     }
 
 }
