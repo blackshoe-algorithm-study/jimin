@@ -54,7 +54,7 @@ public class 미확인_도착지 {
             ans = new ArrayList<>();
             for(int end: endList){
                 int a1 = dijkstra(start, g) + dijkstra(g, h) + dijkstra(h, end);
-                int a2 = dijkstra(start, h) + dijkstra(h, g) +dijkstra(g, end);
+                int a2 = dijkstra(start, h) + dijkstra(h, g) + dijkstra(g, end);
                 int a3 = dijkstra(start, end);
                 int result = Math.min(a1, a2);
                 if(result >= INF) continue;
