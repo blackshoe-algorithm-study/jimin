@@ -38,6 +38,10 @@ public class 자두나무 {
 
         bfs();
 
+        for(int cnt: dist[T]){
+            sum = Math.max(sum, cnt);
+        }
+
         System.out.print(sum);
     }
     static void bfs(){
@@ -59,7 +63,6 @@ public class 자두나무 {
             if(dist[time+1][limit] < curCount + getPlum){
                 dist[time+1][limit] = curCount + getPlum;
                 que.add(new Plum(pos, time+1, limit));
-                sum = Math.max(sum, curCount + getPlum);
             }
 
             // 자리 이동을 하는 경우
@@ -69,7 +72,6 @@ public class 자두나무 {
                 if(dist[time+1][limit-1] < curCount + getPlum){
                     dist[time+1][limit-1] = curCount + getPlum;
                     que.add(new Plum(newPos, time+1, limit-1));
-                    sum = Math.max(sum, curCount + getPlum);
                 }
             }
         }
